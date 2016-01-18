@@ -1,5 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# Author: Anna Goldstein
+# A different version of wok_soap, where authentication and searching are separate functions.
+# This allows the same session to remain open and avoid the maximum of 5 new sessions per 5 minutes
+
 
 from suds.client import Client
 from suds.transport.http import HttpTransport

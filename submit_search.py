@@ -1,10 +1,8 @@
 # Author: Anna Goldstein
-# This script runs a search on Web of Knowledge, using IP authentication
-# You must have an IP address from an institution with a WOK subscription
+# This script runs a search on Web of Knowledge, using IP authentication.
+# You must have an IP address from an institution with a WOK subscription.
+#
 
-import wok_soap
-import pprint
-import xml.etree.ElementTree as ET
 import csv
 import time
 import os
