@@ -8,7 +8,7 @@ import time
 import urllib
 import urllib2
 
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 
 
 class WebOfKnowledgeSearcher:
@@ -76,7 +76,7 @@ class WebOfKnowledgeSearcher:
             return -1
         except socket.error as serr:
             if serr.errno != errno.ECONNREFUSED:
-                raise serror
+                raise serr
             self.log("Socket error: %s" % serr)
             return -1
 
@@ -114,10 +114,10 @@ class WebOfKnowledgeSearcher:
             self._create_session()
 
     # This return a list of pagecounts in the response, and there should normally be just one.
-    find_pagecounts = lambda self, resp: BeautifulSoup(resp).findAll("span", { "id" : "pageCount.top" })
+    find_pagecounts = lambda self, response: BeautifulSoup(response).findAll("span", { "id" : "pageCount.top" })
 
     # This returns a list of soups, one for each search result item.
-    find_results = lambda self, resp: BeautifulSoup(resp).findAll("div", { "class" : "search-results-item" })
+    find_results = lambda self, response: BeautifulSoup(response).findAll("div", { "class" : "search-results-item" })
 
     def _generic_query(self, data, pagesize=50):
         """Generic driver for performing queries.
@@ -210,6 +210,7 @@ class WebOfKnowledgeSearcher:
 
     query_for_title = lambda self, papers: self.query_for_field(papers, 'title', 'TI')
     query_for_doi   = lambda self, papers: self.query_for_field(papers, 'doi', 'DO')
+
     def query_for_field(self, papers, name_local, name_wok):
         """Perform a query for a single field, for several articles by stacking OR statements.
 
@@ -266,7 +267,7 @@ class WebOfKnowledgeSearcher:
                 try:
                     parsed['first_author'] = span.parent.text.replace("By:", "").split(";")[0]
                 except IndexError:
-                    parsed = filter_out(parser, 'first_author')
+                    parsed = filter_out(parsed, 'first_author')
 
             # The voume is found in the next <span> element after the <span> element with the
             # appropriate trigger text. Sometimes the volumes contains the issue, too, for example

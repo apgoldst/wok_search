@@ -5,6 +5,7 @@ from suds.client import Client
 from suds.transport.http import HttpTransport
 import urllib2
 
+
 class HTTPSudsPreprocessor(urllib2.BaseHandler):
     def __init__(self, SID):
         self.SID = SID
@@ -26,13 +27,13 @@ class WokmwsSoapClient():
         self.url = self.client = {}
         self.SID = ''
 
-        self.url['auth'] = 'http://search.isiknowledge.com/esti/wokmws/ws/WOKMWSAuthenticate?wsdl'
-        self.url['search'] = 'http://search.isiknowledge.com/esti/wokmws/ws/WokSearchLite?wsdl'
+        self.url['auth'] = 'http://search.webofknowledge.com/esti/wokmws/ws/WOKMWSAuthenticate?wsdl'
+        self.url['search'] = 'http://search.webofknowledge.com/esti/wokmws/ws/WokSearch?wsdl'
 
         self.prepare()
 
-    def __del__(self):
-        self.close()
+    # def __del__(self):
+    #     self.close()
 
     def prepare(self):
         """does all the initialization we need for a request"""
@@ -57,25 +58,15 @@ class WokmwsSoapClient():
 
     def search(self, query):
         qparams = {
-            'databaseID' : 'WOS',
+            'databaseId' : 'WOS',
             'userQuery' : query,
-            'queryLanguage' : 'en',
-            'editions' : [{
-                'collection' : 'WOS',
-                'edition' : 'SCI',
-            },{
-                'collection' : 'WOS',
-                'edition' : 'SSCI',
-            }]
+            'queryLanguage' : 'en'
         }
 
         rparams = {
-            'count' : 5, # 1-100
-            'firstRecord' : 1,
-            'fields' : [{
-                'name' : 'Relevance',
-                'sort' : 'D',
-            }],
+            'count' : 100, # 1-100
+            'firstRecord' : 1
         }
 
         return self.client['search'].service.search(qparams, rparams)
+
